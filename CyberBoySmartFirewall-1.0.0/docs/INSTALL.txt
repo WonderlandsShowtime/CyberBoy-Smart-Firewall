@@ -1,0 +1,76 @@
+CyberBoy Smart Firewall 1.0.0 - Installation Notes
+====================================================
+
+Supported systems
+-----------------
+- Windows 10 version 1809 (build 17763) or later, x64
+- Windows 11, x64
+- Administrator privileges are required for WFP filtering.
+
+Install
+-------
+1. Run CyberBoySmartFirewall-Setup-1.0.0.exe.
+2. Accept the MIT license.
+3. Choose an install directory (default: Program Files\CyberBoy Smart Firewall).
+4. Finish the wizard and launch the application.
+5. Approve the Windows elevation prompt.
+
+The installer is not code signed. Windows SmartScreen may ask you to confirm the
+publisher. Verify the SHA-256 checksum supplied with the release before running.
+
+Silent install
+--------------
+CyberBoySmartFirewall-Setup-1.0.0.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+
+Command line
+------------
+CyberBoyFirewall.exe --safe              Start the UI without applying filters.
+CyberBoyFirewall.exe --no-elevate        Do not request elevation (UI testing).
+CyberBoyFirewall.exe --tray              Start minimized to the notification area.
+CyberBoyFirewall.exe --lang zh-CN        Force a UI language (en, zh-CN, zh-TW).
+CyberBoyFirewall.exe --diagnose          Write a diagnostics report.
+CyberBoyFirewall.exe --selftest          Run the WFP self-test (admin required).
+CyberBoyFirewall.exe --selftest-quiet    Write the WFP self-test result and exit (2 if skipped).
+CyberBoyFirewall.exe --reset             Remove filters and browser policies.
+CyberBoyFirewall.exe --reset-quiet       Same as --reset without a message box.
+
+Safe recovery
+-------------
+WFP filters are installed in a dynamic session, so they are removed if the process
+exits or crashes. If the application or a filter set ever appears stuck:
+1. Open an elevated Command Prompt.
+2. Run: "C:\Program Files\CyberBoy Smart Firewall\CyberBoyFirewall.exe" --reset
+3. Restart the application.
+
+Uninstall
+---------
+Use Settings > Apps > Installed apps > CyberBoy Smart Firewall > Uninstall.
+The uninstaller invokes --reset-quiet to remove WFP filters and browser extension
+policies. User configuration under %ProgramData%\CyberBoy is intentionally left in
+place; delete it manually if you want a full reset.
+
+Data
+----
+Configuration: %ProgramData%\CyberBoy\config.json
+Activity log:  %ProgramData%\CyberBoy\logs\firewall.log
+
+If ProgramData is not writable, the application falls back to %LOCALAPPDATA%,
+then the process temporary directory, then a CyberBoyData folder beside the
+executable.
+
+Troubleshooting
+---------------
+- "Administrator privileges are required": start the app from an elevated account
+  or allow the UAC prompt.
+- Full mode blocks an application: add an allow rule on the Rules page, or use
+  DIY mode to lower the switch.
+- Browser extensions are still enabled after Full mode: close and restart the
+  browser. Existing administrator browser policies are never overwritten; use
+  the browser's own policy management in that case.
+- No activity rows: the monitor reports policy-matching established flows, not
+  every packet. Use Windows Event Viewer or a packet capture tool for full
+  telemetry.
+
+License
+-------
+MIT. See LICENSE.
